@@ -1,52 +1,36 @@
-# Next.js Starter Tailwind
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+# Berlin POI
 
-![alt text](https://github.com/taylorbryant/next-starter-tailwind/blob/master/public/screenshot.png "Screenshot of Tailwind Next.js Starter homepage")
+## Dev Setup
 
- <div align="center">
- <p><strong>A <a href="https://nextjs.org" target="_blank">Next.js</a> starter styled using <a href="https://tailwindcss.com/" target="_blank">Tailwind</a>, a utility-first CSS framework.</strong></p>
- <p>Uses Tailwind's <a href="https://tailwindcss.com/docs/controlling-file-size" target="_blank">built-in purge option</a> to remove unused CSS.</p>
- <p>Illustrations by <a href="https://undraw.co/" target="_blank">unDraw</a>.</p>
- <p>View demo <a href="https://next-starter-tailwind.oddstronaut.com/" target="_blank">here</a>.</p>
-</div>
+### 1. Start the PostgreSQL with PostGIS Docker image:
 
-## Deploy
+```
+docker-compose up -d
+```
+> **Note:** The PostgreSQL container will bind to port **5433** as defined in the [docker-compose.yml](./docker-compose.yml)
+### 2. Create the database schema with Prisma Migrate
 
-### Netlify
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/taylorbryant/next-starter-tailwind)
+```
+npx prisma migrate deploy --early-access-feature
+```
 
-### Vercel (FKA ZEIT Now)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https%3A%2F%2Fgithub.com%2Ftaylorbryant%2Fnext-starter-tailwind%2Ftree%2Fmaster)
+### 3. Load the Open Street Maps data set for Berlin
 
-## License
+```
+psql postgresql://test-user:test-password@localhost:5433/interest-points -f berlin-pois.sql
+```
 
-[MIT](https://github.com/taylorbryant/next-starter-tailwind/blob/master/LICENSE.md)
 
-## How you can help
+## Useful information
 
-Enjoying this starter and want to help? You can:
+### Adding location column
 
-- [Create an issue](https://github.com/taylorbryant/next-starter-tailwind/issues/new) with some constructive criticism
-- [Submit a pull request](https://github.com/taylorbryant/next-starter-tailwind/compare) with some improvements to the project
+```sql
+CREATE EXTENSION postgis;
 
-## Contributors ✨
+ALTER TABLE "Events" ADD COLUMN "location" GEOGRAPHY(POINT,4326);
+```
+### Getting the data set
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/Mozart409"><img src="https://avatars2.githubusercontent.com/u/38767929?v=4" width="100px;" alt=""/><br /><sub><b>Amadeus</b></sub></a><br /><a href="https://github.com/taylorbryant/next-starter-tailwind/commits?author=Mozart409" title="Code">💻</a> <a href="#ideas-Mozart409" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://www.synaptech.fr"><img src="https://avatars3.githubusercontent.com/u/10560326?v=4" width="100px;" alt=""/><br /><sub><b>David Eugene</b></sub></a><br /><a href="https://github.com/taylorbryant/next-starter-tailwind/commits?author=egdavid" title="Code">💻</a></td>
-  </tr>
-</table>
-
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+1. Download Berlin shp shape file from: https://download.geofabrik.de/europe/germany/berlin-latest-free.shp.zip
+2. Run `shp2pgsql gis_osm_pois_free_1.shp public.berlin-pois > berlin-pois.sql` to convert the `shp` file to `sql` so that it can be imported into PostgreSQL.

@@ -5,17 +5,17 @@ function Header() {
   const [isExpanded, toggleExpansion] = useState(false);
 
   return (
-    <header className="bg-teal-500">
-      <div className="flex flex-wrap items-center justify-between max-w-4xl p-4 mx-auto md:flex-no-wrap md:p-8">
+      <header className="from-blue-600 bg-gradient-to-b to-blue-900">
+    <div className="flex flex-wrap items-center justify-between max-w-4xl p-4 mx-auto md:flex-no-wrap md:p-8">
         <div className="flex items-center">
           <img
-            src="tailwind-logo.svg"
+            src="logo-1.png"
             className="w-10 mr-3 text-white"
           />
 
           <Link href="/">
             <a className="text-xl font-bold text-white">
-              Next.js Starter Tailwind
+              Berlin Points of Interest
             </a>
           </Link>
         </div>

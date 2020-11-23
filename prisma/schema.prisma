@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Events {
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  name        String
+  description String?
+  start       DateTime
+  end         DateTime
+  organiserId Int?
+  // This type is currently not supported.
+  // location geography?
+  organiser   User?      @relation(fields: [organiserId], references: [id])
+  attendees   User[]     @relation("attendance")
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  name            String
+  eventsOrganised Events[]
+  eventsAttending Events[] @relation("attendance")
+}
