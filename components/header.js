@@ -5,7 +5,7 @@ function Header() {
   const [isExpanded, toggleExpansion] = useState(false);
 
   return (
-      <header className="from-blue-600 bg-gradient-to-b to-blue-900">
+      <header className="from-gray-700 bg-gradient-to-b to-black">
     <div className="flex flex-wrap items-center justify-between max-w-4xl p-4 mx-auto md:flex-no-wrap md:p-8">
         <div className="flex items-center">
           <img
@@ -45,7 +45,7 @@ function Header() {
           ].map(navigationItem => (
             <li className="mt-3 md:mt-0 md:ml-6" key={navigationItem.title}>
               <Link href={navigationItem.route}>
-                <a className="block text-white">{navigationItem.title}</a>
+                <a className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{navigationItem.title}</a>
               </Link>
             </li>
           ))}

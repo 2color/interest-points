@@ -18,13 +18,11 @@ export default async function handler(req, res) {
 
   const parsedResults = results.map((item) => {
     // Parse GeoJSON
+    
     return {
       geometry: JSON.parse(item.location),
-      type: 'Feature',
-      properties: {
-        name: item.name,
-        type: typeToName[item.type],
-      },
+      name: item.name,
+      type: typeToName[item.type],
     }
   })
   res.end(JSON.stringify(parsedResults))
