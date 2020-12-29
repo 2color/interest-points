@@ -1,8 +1,9 @@
 import Layout from '../components/layout'
 import PlacesTable from '../components/table'
+import PointTypeFilter from '../components/typefilter'
 import dynamic from 'next/dynamic'
 import useSWR from 'swr'
-import { Dispatch, Fragment, useCallback, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Coordinates, PointOfInterest } from '../types/types'
 
 // @ts-ignore
@@ -44,7 +45,9 @@ function IndexPage() {
     fetcher,
   )
 
-  useEffect(() => setUserPois(data), [data])
+  useEffect(() => {
+    setUserPois(data?.map((poi) => Object.assign({}, poi, { visible: false })))
+  }, [data])
 
   if (error) return 'Whoops! it looks like the API is not working.'
 
@@ -67,7 +70,7 @@ function IndexPage() {
               userPosition={userPosition}
               pois={userPois}
             />
-            <Filter pois={userPois} setUserPois={setUserPois} />
+            <PointTypeFilter pois={userPois} setUserPois={setUserPois} />
             <PlacesTable pois={userPois} />
           </Fragment>
         )}
@@ -75,70 +78,5 @@ function IndexPage() {
     </Layout>
   )
 }
-
-const Filter: React.FC<PlacesProps> = ({ pois, setUserPois }) => {
-  if (!pois) return null
-
-  const [pointTypes, setPointTypes] = useState<PointTypesState[]>(
-    getUniquePointTypes(pois),
-  )
-
-  
-  const handleChange = useCallback((e) => {
-    setPointTypes(pointTypes => pointTypes.map((pointType) => ({
-        type: pointType.type,
-        checked: pointType.type === e.target.name ? e.target.checked : pointType.checked,
-      })),
-    )
-    // setUserPois((pois) => {
-    //   pois.map(poi => ({ visible: poi.type,...poi }))
-    // })
-  }, [])
-
-  return (
-    <div className="flex flex-col my-2">
-      {pointTypes.map((pointType, i) => (
-        <label key={pointType.type} className="inline-flex items-center mt-3">
-          <span className="ml-2 text-gray-700">{pointType.type}</span>
-          <input
-            type="checkbox"
-            name={pointType.type}
-            checked={pointType.checked}
-            className="form-checkbox h-5 w-5 text-gray-600"
-            onChange={handleChange}
-          ></input>
-        </label>
-      ))}
-    </div>
-  )
-}
-
-// Get the unique types
-
-// const getInitialPointTypeState = (pois: PointOfInterest[]) => {
-//   const state = {}
-//   for (const poi of pois) {
-//     state[poi.type] = true
-//   }
-//   return state
-// }
-
-const getUniquePointTypes = (pois: PointOfInterest[]): PointTypesState[] => {
-  const pointTypes = new Set(pois.map((poi) => poi.type))
-
-  return Array.from(pointTypes).map((type) => ({ type, checked: true }))
-}
-
-
-interface PlacesProps {
-  pois: PointOfInterest[]
-  setUserPois: Dispatch<React.SetStateAction<PointOfInterest[]>>
-}
-
-interface PointTypesState {
-  type: string
-  checked: boolean
-}
-
 
 export default IndexPage

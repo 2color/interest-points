@@ -56,9 +56,10 @@ const Map: React.FC<MapProps> = ({ pois, userPosition, userPositionError }) => {
   )
 }
 
-function PointsOfInterest({ pois }) {
+const PointsOfInterest: React.FC<{ pois: PointOfInterest[] }> = ({ pois }) => {
   if (!pois) return null
-  return pois.map((poi) => (
+
+  return pois.filter(poi => poi.visible).map((poi) => (
     <GeoJSON
       key={`${poi.geometry.coordinates[0]}.${poi.geometry.coordinates[1]}.${poi.type}`}
       data={poiToGEOJSON(poi)}

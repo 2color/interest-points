@@ -7,9 +7,11 @@ interface PlacesProps {
 
 const PlacesTable: React.FC<PlacesProps> = ({ pois }) => {
   if (!pois) return null
-  // type
-  // name
-  //
+
+  const pointsToRender = pois.filter((poi) => poi.visible)
+
+  if (pointsToRender.length === 0) return null
+
   return (
     <div className="flex flex-col my-2">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -36,8 +38,10 @@ const PlacesTable: React.FC<PlacesProps> = ({ pois }) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {pois.map((poi) => (
-                  <tr key={`${poi.geometry.coordinates[0]}.${poi.geometry.coordinates[1]}.${poi.type}`}>
+                {pointsToRender.map((poi) => (
+                  <tr
+                    key={`${poi.geometry.coordinates[0]}.${poi.geometry.coordinates[1]}.${poi.type}`}
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="">
