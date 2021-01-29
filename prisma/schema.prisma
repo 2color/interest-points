@@ -18,7 +18,7 @@ model Events {
   end         DateTime
   organiserId Int?
   /// This type is currently not supported by the Prisma Client.
-  location    Unsupported("geography")?
+  // location    Unsupported("geography")?
   organiser   User?                     @relation(fields: [organiserId], references: [id])
   attendees   User[]                    @relation("attendance")
 }
