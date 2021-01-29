@@ -1,5 +1,6 @@
 import Layout from '../components/layout'
 import PlacesTable from '../components/table'
+import MapMenu from '../components/MapMenu'
 import PointTypeFilter from '../components/typefilter'
 import dynamic from 'next/dynamic'
 import useSWR from 'swr'
@@ -16,26 +17,16 @@ const fetcher = (...args: [RequestInfo, RequestInit]) =>
 
 function IndexPage() {
   // State to store user position and error using the geolocation API
-  const [userPois, setUserPois] = useState<PointOfInterest[]>(null)
-  const [userPosition, setUserPosition] = useState<Coordinates>(null)
+  const [userPois, setUserPois] = useState<PointOfInterest[]>([])
+  const [userPosition, setUserPosition] = useState<Coordinates>()
   const [userPositionError, setUserPositionError] = useState<string>(null)
 
-  // effect to run once and get user position
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') {
-      // Default to Berlin in development
-      setUserPosition({ longitude: 13.4636483, latitude: 52.4999915 })
-    } else {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserPosition(position.coords)
-        },
-        () => {
-          setUserPositionError('Unable to retrieve your location')
-        },
-      )
-    }
+    // effect to run once and set the default user position
+    setUserPosition({ longitude: 13.4221333, latitude: 52.5400275 })
   }, [])
+
+  
 
   // Fetch points of interest from the API
   const { data, error }: { data?: PointOfInterest[]; error?: Error } = useSWR(
@@ -53,17 +44,12 @@ function IndexPage() {
 
   return (
     <Layout>
-      <style global jsx>{`
-        .leaflet-container {
-          height: 550px;
-          width: 100%;
-        }
-      `}</style>
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col justify-center items-center">
         {!userPosition && !userPositionError ? (
           'Getting the user location'
         ) : (
           <Fragment>
+            <MapMenu setUserPositionError={setUserPositionError} setUserPosition={setUserPosition}  />
             <MapWithNoSSR
               // @ts-ignore
               userPositionError={userPositionError}

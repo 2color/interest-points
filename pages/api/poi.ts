@@ -1,29 +1,48 @@
-import { PrismaClient } from '@prisma/client'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { typeToName } from './_lib/typemapping'
-const prisma = new PrismaClient()
+import prisma from './_lib/prisma'
+import { GeoJsonObject, GeoJsonProperties, GeoJsonGeometryTypes } from 'geojson'
 
-export default async function handler(req, res) {
+type QueryResult = {
+  location: string
+  type: string
+  name: string
+}
+
+type ReturnedResult = {
+  geometry: GeoJsonObject & GeoJsonProperties & GeoJsonGeometryTypes
+  type: string
+  name: string
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (!req.query.longitude || !req.query.latitude) {
     res.statusCode = 401
     return
   }
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'application/json')
-  const results = await prisma.$queryRaw`SELECT ST_AsGeoJSON(geom) as location, fclass as type, name
-    FROM "berlin-pois"
-    WHERE ST_DWithin(geom, ST_MakePoint(${Number(
-      req.query.longitude,
-    )}, ${Number(req.query.latitude)}), 600, true)
+
+  const results = await prisma.$queryRaw<
+    QueryResult[]
+  >`SELECT ST_AsGeoJSON(geom) as location, fclass as type, name
+  FROM "berlin-pois"
+  WHERE ST_DWithin(geom, ST_MakePoint(${Number(req.query.longitude)}, ${Number(
+    req.query.latitude,
+  )}), 600, true)
     ORDER BY type;`
 
-  const parsedResults = results.map((item) => {
-    // Parse GeoJSON
-    
+  const parsedResults: ReturnedResult[] = results.map((item) => {
     return {
+      // Parse GeoJSON
       geometry: JSON.parse(item.location),
       name: item.name,
       type: typeToName[item.type],
     }
   })
+
+  res.setHeader('Content-Type', 'application/json')
+  res.statusCode = 200
   res.end(JSON.stringify(parsedResults))
 }

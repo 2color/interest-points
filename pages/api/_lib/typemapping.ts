@@ -1,4 +1,8 @@
-export const typeToName = {
+interface TypeNameMapping {
+  [key: string]: string
+}
+
+export const typeToName: TypeNameMapping = {
   archaeological: 'Archaeological',
   arts_centre: 'Arts Centre',
   artwork: 'Artwork',

@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["nativeTypes"]
 }
 
@@ -9,18 +9,18 @@ datasource db {
 }
 
 model Events {
-  id          Int        @id @default(autoincrement())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id          Int                       @id @default(autoincrement())
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime
   name        String
   description String?
   start       DateTime
   end         DateTime
   organiserId Int?
-  // This type is currently not supported.
-  // location    Unsupported("GEOGRAPHY(POINT,4326)")?
-  organiser   User?      @relation(fields: [organiserId], references: [id])
-  attendees   User[]     @relation("attendance")
+  /// This type is currently not supported by the Prisma Client.
+  location    Unsupported("geography")?
+  organiser   User?                     @relation(fields: [organiserId], references: [id])
+  attendees   User[]                    @relation("attendance")
 }
 
 model User {

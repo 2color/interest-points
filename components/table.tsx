@@ -14,25 +14,25 @@ const PlacesTable: React.FC<PlacesProps> = ({ pois }) => {
 
   return (
     <div className="flex flex-col my-2">
-      <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+      <div className="overflow-x-auto -my-2 sm:-mx-6 lg:-mx-8">
+        <div className="inline-block py-2 min-w-full align-middle sm:px-6 lg:px-8">
+          <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
                   >
                     Type
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
                   >
                     Name
                   </th>
-                  <th scope="col" className="relative px-6 py-3">
+                  <th scope="col" className="relative py-3 px-6">
                     <span className="sr-only">Edit</span>
                   </th>
                 </tr>
@@ -42,7 +42,7 @@ const PlacesTable: React.FC<PlacesProps> = ({ pois }) => {
                   <tr
                     key={`${poi.geometry.coordinates[0]}.${poi.geometry.coordinates[1]}.${poi.type}`}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="py-4 px-6 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="">
                           <div className="text-sm font-medium text-gray-900">
@@ -51,10 +51,10 @@ const PlacesTable: React.FC<PlacesProps> = ({ pois }) => {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="py-4 px-6 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{poi.name}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
                       <a
                         href="#"
                         className="text-indigo-600 hover:text-indigo-900"

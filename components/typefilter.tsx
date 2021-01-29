@@ -38,7 +38,7 @@ const PointTypeFilter: React.FC<PlacesProps> = ({ pois, setUserPois }) => {
   }, [pointTypes])
 
   return (
-    <div className="flex flex-col grid-cols-3	 my-2">
+    <div className="flex flex-col my-2 grid-cols-3	">
       {Object.keys(pointTypes).map((pointType) => (
         <label key={pointType} className="inline-flex items-center mt-3">
           <span className="ml-2 text-gray-700">{pointType}</span>
@@ -46,7 +46,7 @@ const PointTypeFilter: React.FC<PlacesProps> = ({ pois, setUserPois }) => {
             type="checkbox"
             name={pointType}
             checked={pointTypes[pointType]}
-            className="form-checkbox h-5 w-5 text-gray-600"
+            className="w-5 h-5 text-gray-600 form-checkbox"
             onChange={handleChange}
           ></input>
         </label>

@@ -18,11 +18,12 @@
   "author": "Daniel Norman",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^2.16.0-dev.36",
+    "@prisma/client": "2.16.0-dev.37",
     "geojson": "^0.5.0",
     "leaflet": "^1.7.1",
     "leaflet-geosearch": "^3.1.0",
     "next": "10.0.4",
+    "postcss": "^8.2.4",
     "react": "17.0.1",
     "react-data-grid": "^7.0.0-canary.33",
     "react-dom": "17.0.1",
@@ -30,9 +31,13 @@
     "swr": "^0.3.11"
   },
   "devDependencies": {
-    "prisma": "^2.16.0-dev.36",
+    "@types/geojson": "^7946.0.7",
+    "@types/leaflet": "^1.5.21",
+    "@types/leaflet-geosearch": "^2.7.1",
     "@types/node": "^14.14.16",
     "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "prisma": "2.16.0-dev.37",
     "rustywind": "0.7.0",
     "tailwindcss": "2.0.2",
     "typescript": "^4.1.3"
