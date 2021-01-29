@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L, { Map as LeafletMap } from 'leaflet'
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import { Coordinates, LeafletGeoJson, PointOfInterest } from '../types/types'
 
-const provider = new OpenStreetMapProvider()
 
+// import { OpenStreetMapProvider } from 'leaflet-geosearch'
+// const provider = new OpenStreetMapProvider()
 // const searchControl = new GeoSearchControl({
 //   provider: provider,
 //   style: 'button',
@@ -20,8 +20,7 @@ interface MapProps {
   userPositionError: string
 }
 
-
-const Map: React.FC<MapProps> = ({ pois, userPosition, userPositionError }) => {
+const Map: React.FC<MapProps> = ({ pois, userPosition }) => {
   const [map, setMap] = useState<LeafletMap>()
 
   // Set the view of the map to user location

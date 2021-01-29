@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, Dispatch } from 'react'
+import React, { useCallback, Dispatch } from 'react'
 import { Coordinates } from '../types/types'
 
 interface Props {
