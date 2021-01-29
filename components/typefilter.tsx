@@ -58,8 +58,8 @@ const PointTypeFilter: React.FC<PlacesProps> = ({ pois, setUserPois }) => {
 export default PointTypeFilter
 
 // Get the unique types
-const getInitialPointTypeState = (pois: PointOfInterest[]) => {
-  const state = {}
+const getInitialPointTypeState = (pois: PointOfInterest[]): PointTypeFilterState => {
+  const state: PointTypeFilterState = {}
   for (const poi of pois) {
     state[poi.type] = false
   }
