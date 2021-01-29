@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["nativeTypes"]
 }
 
 datasource db {
@@ -17,7 +18,7 @@ model Events {
   end         DateTime
   organiserId Int?
   // This type is currently not supported.
-  // location geography?
+  // location    Unsupported("GEOGRAPHY(POINT,4326)")?
   organiser   User?      @relation(fields: [organiserId], references: [id])
   attendees   User[]     @relation("attendance")
 }
