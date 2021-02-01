@@ -29,6 +29,7 @@
     "react-data-grid": "^7.0.0-canary.33",
     "react-dom": "17.0.1",
     "react-leaflet": "^3.0.3",
+    "react-select": "^4.0.2",
     "swr": "^0.3.11"
   },
   "devDependencies": {
@@ -38,6 +39,7 @@
     "@types/node": "^14.14.16",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-select": "^4.0.8",
     "prisma": "2.16.0-dev.40",
     "rustywind": "0.7.0",
     "tailwindcss": "2.0.2",

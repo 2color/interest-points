@@ -1,56 +1,55 @@
-import { Dispatch, useCallback, useEffect, useState } from 'react'
+import { Dispatch, useCallback, useMemo } from 'react'
 import { PointOfInterest } from '../types/types'
+import Select from 'react-select'
 
-interface PlacesProps {
+interface PointTypeFilterProps {
   pois: PointOfInterest[]
   setUserPois: Dispatch<React.SetStateAction<PointOfInterest[]>>
 }
 
-interface PointTypeFilterState {
-  [key: string]: boolean
-}
-
-const PointTypeFilter: React.FC<PlacesProps> = ({ pois, setUserPois }) => {
+type PointTypeFilterState = {
+  value: string
+  label: string
+}[]
+// Input component for the user to select the visible point types/categories,
+// e.g. ATM, public bin. Renders the list from the available `poi`s
+const PointTypeFilter: React.FC<PointTypeFilterProps> = ({ pois, setUserPois }) => {
   if (!pois) return null
 
-  const [pointTypes, setPointTypes] = useState<PointTypeFilterState>(
-    getInitialPointTypeState(pois),
+  // Memoize calculating the unique point types for the select
+  const pointTypes = useMemo<PointTypeFilterState>(
+    () => getUniquePointTypes(pois),
+    [pois],
   )
 
   const handleChange = useCallback(
-    (e) => {
-      setPointTypes((pointTypes) => ({
-        ...pointTypes,
-        [e.target.name]: e.target.checked,
-      }))
+    (selectedPointTypes) => {
+
+      setUserPois((pois) => {
+        const updated = pois.map((poi) => {
+          for (const selectedType of selectedPointTypes) {
+            if (selectedType.value === poi.type) {
+              return { ...poi, visible: true }
+            }
+          }
+
+          return { ...poi, visible: false }
+        })
+        return updated
+      })
     },
-    [pointTypes],
+    [setUserPois],
   )
 
-  useEffect(() => {
-    // Update visible pois when filters
-    setUserPois((pois) => {
-      const updated = pois.map((poi) => {
-        return { ...poi, visible: pointTypes[poi.type] }
-      })
-      return updated
-    })
-  }, [pointTypes])
-
   return (
-    <div className="flex flex-col my-2 grid-cols-3	">
-      {Object.keys(pointTypes).map((pointType) => (
-        <label key={pointType} className="inline-flex items-center mt-3">
-          <span className="ml-2 text-gray-700">{pointType}</span>
-          <input
-            type="checkbox"
-            name={pointType}
-            checked={pointTypes[pointType]}
-            className="w-5 h-5 text-gray-600 form-checkbox"
-            onChange={handleChange}
-          ></input>
-        </label>
-      ))}
+    <div className="flex flex-row flex-grow my-2 w-48">
+      <Select
+        placeholder="Point types"
+        className="w-48"
+        isMulti
+        options={pointTypes}
+        onChange={handleChange}
+      />
     </div>
   )
 }
@@ -58,10 +57,11 @@ const PointTypeFilter: React.FC<PlacesProps> = ({ pois, setUserPois }) => {
 export default PointTypeFilter
 
 // Get the unique types
-const getInitialPointTypeState = (pois: PointOfInterest[]): PointTypeFilterState => {
-  const state: PointTypeFilterState = {}
-  for (const poi of pois) {
-    state[poi.type] = false
-  }
-  return state
+const getUniquePointTypes = (pois: PointOfInterest[]): PointTypeFilterState => {
+  const options = [...new Set(pois.map((poi) => poi.type))].map((type) => ({
+    value: type,
+    label: type,
+  }))
+
+  return options
 }
