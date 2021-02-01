@@ -4,6 +4,7 @@ import prisma from './_lib/prisma'
 import { GeoJsonObject, GeoJsonProperties, GeoJsonGeometryTypes } from 'geojson'
 
 type QueryResult = {
+  id: number
   location: string
   type: string
   name: string
@@ -26,7 +27,7 @@ export default async function handler(
 
   const results = await prisma.$queryRaw<
     QueryResult[]
-  >`SELECT ST_AsGeoJSON(geom) as location, fclass as type, name
+  >`SELECT ST_AsGeoJSON(geom) as location, gid as id, fclass as type, name
   FROM "berlin-pois"
   WHERE ST_DWithin(geom, ST_MakePoint(${Number(req.query.longitude)}, ${Number(
     req.query.latitude,
@@ -38,6 +39,7 @@ export default async function handler(
       // Parse GeoJSON
       geometry: JSON.parse(item.location),
       name: item.name,
+      id: item.id,
       type: typeToName[item.type],
     }
   })
