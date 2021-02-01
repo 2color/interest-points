@@ -32,9 +32,9 @@ const PlacesTable: React.FC<PlacesProps> = ({ pois }) => {
                   >
                     Name
                   </th>
-                  <th scope="col" className="relative py-3 px-6">
-                    <span className="sr-only">Edit</span>
-                  </th>
+                  {/* <th scope="col" className="relative py-3 px-6">
+                    Show
+                  </th> */}
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -54,14 +54,14 @@ const PlacesTable: React.FC<PlacesProps> = ({ pois }) => {
                     <td className="py-4 px-6 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{poi.name}</div>
                     </td>
-                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                    {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
                       <a
                         href="#"
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         show
                       </a>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
