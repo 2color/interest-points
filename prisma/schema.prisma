@@ -11,14 +11,14 @@ datasource db {
 model Events {
   id          Int                       @id @default(autoincrement())
   createdAt   DateTime                  @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime                  @updatedAt
   name        String
   description String?
   start       DateTime
   end         DateTime
   organiserId Int?
   /// This type is currently not supported by the Prisma Client.
-  // location    Unsupported("geography")?
+  location    Unsupported("geography")?
   organiser   User?                     @relation(fields: [organiserId], references: [id])
   attendees   User[]                    @relation("attendance")
 }
@@ -27,6 +27,30 @@ model User {
   id              Int      @id @default(autoincrement())
   email           String   @unique
   name            String
+  avatar          String   @db.VarChar(150)
   eventsOrganised Events[]
   eventsAttending Events[] @relation("attendance")
+}
+
+model berlin_pois {
+  gid    Int                      @id @default(autoincrement())
+  osm_id String?                  @db.VarChar(10)
+  code   Int?                     @db.SmallInt
+  fclass String?                  @db.VarChar(28)
+  name   String?                  @db.VarChar(100)
+  geom   Unsupported("geometry")?
+
+  @@index([geom], name: "berlin_poi_idx")
+  @@map("berlin-pois")
+  @@ignore
+}
+
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+
+  @@ignore
 }
